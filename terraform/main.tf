@@ -5,16 +5,16 @@ resource "docker_network" "app" {
 }
 
 resource "docker_image" "api" {
-  name = "tp1_api:latest"
+  name = "${var.project_name}_api:latest"
 
   build {
-    context    = "${path.module}/.."
+    context    = "${path.module}/../app"
     dockerfile = "Dockerfile"
   }
 }
 
 resource "docker_container" "db" {
-  name  = "tp1_db"
+  name  = "${var.project_name}_db"
   image = "postgres:16-alpine"
 
   env = [
@@ -34,7 +34,7 @@ resource "docker_container" "db" {
 }
 
 resource "docker_container" "adminer" {
-  name  = "tp1_adminer"
+  name  = "${var.project_name}_adminer"
   image = "adminer:latest"
 
   networks_advanced {
@@ -50,7 +50,7 @@ resource "docker_container" "adminer" {
 }
 
 resource "docker_container" "api" {
-  name  = "tp1_api"
+  name  = "${var.project_name}_api"
   image = docker_image.api.image_id
 
   env = [
